@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0A0A0A"
+    android:padding="8dp">
+
+	<ListView
+        android:id="@+id/consciousness_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/input_layout"
+        android:divider="#1A3A5A"
+        android:dividerHeight="1dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll" />
+
+	<LinearLayout
+        android:id="@+id/input_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#121212"
+        android:padding="4dp">
+
+		<EditText
+            android:id="@+id/consciousness_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#05101E"
+            android:textColor="#00BFFF"
+            android:hint="Звернення до Ноосфери..."
+            android:textColorHint="#1A3A5A"
+            android:padding="12dp"
+            android:textSize="14sp" />
+
+		<Button
+            android:id="@+id/btn_consciousness_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="КОНТАКТ"
+            android:backgroundTint="#1A3A5A"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+	</LinearLayout>
+</RelativeLayout>

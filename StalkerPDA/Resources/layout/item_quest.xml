@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:background="#0D0B0A">
+
+	<TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#f2e8d9"
+        android:textSize="16sp"
+        android:fontFamily="monospace"
+        android:textStyle="bold"
+        android:text="> "
+        android:layout_marginEnd="8dp" />
+
+	<TextView
+        android:id="@+id/quest_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#f2e8d9"
+        android:textSize="16sp"
+        android:fontFamily="monospace" />
+
+</LinearLayout>

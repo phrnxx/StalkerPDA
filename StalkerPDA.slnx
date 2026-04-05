@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="StalkerPDA/StalkerPDA.csproj">
+    <Deploy />
+  </Project>
+</Solution>
