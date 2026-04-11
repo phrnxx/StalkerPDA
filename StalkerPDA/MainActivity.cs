@@ -40,7 +40,6 @@ namespace StalkerPDA
             _tvSignal = FindViewById<TextView>(Resource.Id.sidebar_signal);
             _tvClock = FindViewById<TextView>(Resource.Id.sidebar_clock);
 
-            // Таймер обновления статусов (раз в 30 секунд)
             _statusTimer = new Timer((e) => { RunOnUiThread(UpdateStatusIndicators); }, null, 0, 30000);
 
             var btnQuests = FindViewById<Button>(Resource.Id.tab_quests);
@@ -65,7 +64,6 @@ namespace StalkerPDA
         {
             _tvClock.Text = DateTime.Now.ToString("HH:mm");
 
-            // Реальный заряд батареи
             var filter = new Android.Content.IntentFilter(Android.Content.Intent.ActionBatteryChanged);
             var batteryIntent = RegisterReceiver(null, filter);
             int level = batteryIntent?.GetIntExtra(BatteryManager.ExtraLevel, -1) ?? -1;

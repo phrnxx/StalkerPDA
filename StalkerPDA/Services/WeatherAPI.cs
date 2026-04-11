@@ -15,11 +15,11 @@ namespace StalkerPDA.Services
                 string response = await client.GetStringAsync(url);
                 var data = JObject.Parse(response);
                 var temp = data["current_weather"]?["temperature"]?.ToString();
-                return $"Погода: {temp}°C. Датчики в норме.";
+                return $"Погода: {temp}°C. Датчики в нормі.";
             }
             catch
             {
-                return "Погода: Нет связи с метеостанцией.";
+                return "Погода: Немає зв'язку з С.Ф.Е.Р.О.Й.";
             }
         }
     }

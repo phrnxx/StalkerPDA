@@ -10,14 +10,13 @@ namespace StalkerPDA.Services
 {
     public class GeminiService
     {
-        private const string GeminiKey = "КЛЮЧ"; // Встав свій ключ
-        private const string GroqKey = "КЛЮЧ";   // Встав свій ключ
+        private const string GeminiKey = "КЛЮЧ";
+        private const string GroqKey = "КЛЮЧ";   
 
         private const string GroqModel = "llama-3.1-8b-instant";
 
         public async Task<string> SendConsciousnessMessageAsync(string userMessage)
         {
-            // Жорстка інструкція для ШІ, щоб прибрати граматичні помилки та вигадані слова
             string sysPrompt = "Ти — інтелектуальний термінал системи 'О-Свідомість'. " +
                                "Твій стиль: суворий, науково-містичний, лаконічний. " +
                                "КРИТИЧНО ВАЖЛИВО: Використовуй тільки існуючі слова української мови. " +
@@ -33,10 +32,8 @@ namespace StalkerPDA.Services
         {
             string timeTag = DateTime.Now.ToString("HH:mm:ss");
 
-            // Формуємо запит так, щоб Gemini чітко бачила різницю між інструкцією та запитом
             string combinedPrompt = $"ІНСТРУКЦІЯ: {systemContent}\n\nКОРИСТУВАЧ: {userContent}";
 
-            // 1. СПРОБА ЧЕРЕЗ GEMINI
             try
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(7) };
@@ -50,7 +47,6 @@ namespace StalkerPDA.Services
                             parts = new[] { new { text = combinedPrompt } }
                         }
                     },
-                    // Знижуємо температуру, щоб відповіді були логічними, а не вигаданими
                     generationConfig = new
                     {
                         temperature = 0.4,
@@ -85,7 +81,6 @@ namespace StalkerPDA.Services
                 Log.Error("PDA_LOG", $"[{timeTag}] Gemini ERROR: {ex.Message}");
             }
 
-            // 2. СПРОБА ЧЕРЕЗ GROQ (Llama 3.1)
             try
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
@@ -101,7 +96,7 @@ namespace StalkerPDA.Services
                         new { role = "system", content = systemContent },
                         new { role = "user", content = userContent }
                     },
-                    temperature = 0.5 // Також знижуємо температуру тут
+                    temperature = 0.5 
                 };
 
                 request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
@@ -125,7 +120,6 @@ namespace StalkerPDA.Services
                 Log.Error("PDA_LOG", $"[{timeTag}] Groq ERROR: {ex.Message}");
             }
 
-            // 3. СПРОБА ЧЕРЕЗ POLLINATIONS (Безкоштовний резерв)
             try
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
