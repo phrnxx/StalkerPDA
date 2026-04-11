@@ -24,19 +24,21 @@ namespace StalkerPDA.UI.Fragments
         {
             var view = new LinearLayout(Activity) { Orientation = Orientation.Vertical };
             view.SetBackgroundColor(Color.Transparent);
+            view.SetPadding(16, 16, 16, 16);
 
-            var btnBack = new Button(Activity) { Text = "< ПОВЕРНУТИСЯ" };
-            btnBack.SetTextColor(Color.ParseColor("#00BFFF"));
+            var btnBack = new Button(Activity) { Text = "< [ НАЗАД ]" };
+            btnBack.SetTextColor(Color.ParseColor("#43A047"));
             btnBack.SetBackgroundColor(Color.Transparent);
             btnBack.Gravity = GravityFlags.Left;
             btnBack.Click += (s, e) => FragmentManager.PopBackStack();
             view.AddView(btnBack);
 
-            var title = new TextView(Activity) { Text = _category.ToUpper(), TextSize = 20 };
-            title.SetTextColor(Color.ParseColor("#00BFFF"));
-            title.SetPadding(20, 20, 20, 20);
+            var title = new TextView(Activity) { Text = _category.ToUpper(), TextSize = 18 };
+            title.SetTextColor(Color.ParseColor("#81C784"));
+            title.SetPadding(0, 20, 0, 20);
             view.AddView(title);
 
+            // Загрузка данных
             if (_category == "Локації") _items = LoreDatabase.GetLocations();
             else if (_category == "Мутанти") _items = LoreDatabase.GetMutants();
             else if (_category == "Аномалії") _items = LoreDatabase.GetAnomalies();
@@ -51,9 +53,11 @@ namespace StalkerPDA.UI.Fragments
 
             listView.ItemClick += (s, e) =>
             {
-                var item = _items[e.Position];
+                var selectedItem = _items[e.Position];
+                var detailFrag = new LoreDetailFragment(selectedItem);
                 var transaction = FragmentManager.BeginTransaction();
-                transaction.Replace(Resource.Id.fragment_container, new LoreDetailFragment(item));
+
+                transaction.Replace(Resource.Id.main_fragment_container, detailFrag);
                 transaction.AddToBackStack(null);
                 transaction.Commit();
             };

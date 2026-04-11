@@ -10,15 +10,21 @@ namespace StalkerPDA.Services
 {
     public class GeminiService
     {
-        private const string GeminiKey = "КЛЮЧ";
-        private const string GroqKey = "КЛЮЧ";
+        private const string GeminiKey = "КЛЮЧ"; // Встав свій ключ
+        private const string GroqKey = "КЛЮЧ";   // Встав свій ключ
 
         private const string GroqModel = "llama-3.1-8b-instant";
 
         public async Task<string> SendConsciousnessMessageAsync(string userMessage)
         {
-            string sysPrompt = "Ти — 'О-Свідомість'. Відповідай українською, загадково. Ти — розум Зони.";
-            string offlineResponse = "[СИСТЕМА]: Ноосфера закрита викидом.";
+            // Жорстка інструкція для ШІ, щоб прибрати граматичні помилки та вигадані слова
+            string sysPrompt = "Ти — інтелектуальний термінал системи 'О-Свідомість'. " +
+                               "Твій стиль: суворий, науково-містичний, лаконічний. " +
+                               "КРИТИЧНО ВАЖЛИВО: Використовуй тільки існуючі слова української мови. " +
+                               "Дотримуйся правил граматики та пунктуації. Не вигадуй нових термінів. " +
+                               "Ти — колективний розум Зони, говори чітко, без 'словесного сміття'.";
+
+            string offlineResponse = "[СИСТЕМА]: Критична помилка зв'язку з Ноосферою. Спробуйте пізніше.";
 
             return await ExecuteTripleFallbackAsync(sysPrompt, userMessage, offlineResponse);
         }
@@ -26,8 +32,11 @@ namespace StalkerPDA.Services
         private async Task<string> ExecuteTripleFallbackAsync(string systemContent, string userContent, string offlineFallback)
         {
             string timeTag = DateTime.Now.ToString("HH:mm:ss");
-            string combinedPrompt = $"{systemContent}\nЗапит: {userContent}";
 
+            // Формуємо запит так, щоб Gemini чітко бачила різницю між інструкцією та запитом
+            string combinedPrompt = $"ІНСТРУКЦІЯ: {systemContent}\n\nКОРИСТУВАЧ: {userContent}";
+
+            // 1. СПРОБА ЧЕРЕЗ GEMINI
             try
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(7) };
@@ -38,11 +47,16 @@ namespace StalkerPDA.Services
                     {
                         new
                         {
-                            parts = new[]
-                            {
-                                new { text = combinedPrompt }
-                            }
+                            parts = new[] { new { text = combinedPrompt } }
                         }
+                    },
+                    // Знижуємо температуру, щоб відповіді були логічними, а не вигаданими
+                    generationConfig = new
+                    {
+                        temperature = 0.4,
+                        topK = 40,
+                        topP = 0.95,
+                        maxOutputTokens = 400
                     }
                 };
 
@@ -52,21 +66,18 @@ namespace StalkerPDA.Services
                 );
 
                 string raw = await res.Content.ReadAsStringAsync();
-                Log.Debug("PDA_LOG", $"[{timeTag}] Gemini RAW: {raw}");
 
                 if (res.IsSuccessStatusCode)
                 {
                     var j = JObject.Parse(raw);
-
                     string result = j["candidates"]?[0]?["content"]?["parts"]?[0]?["text"]?.ToString();
 
                     if (!string.IsNullOrWhiteSpace(result))
                     {
-                        Log.Debug("PDA_LOG", $"[{timeTag}] Gemini RESPONSE: {result}");
+                        Log.Debug("PDA_LOG", $"[{timeTag}] Gemini OK");
                         return result.Trim();
                     }
                 }
-
                 Log.Debug("PDA_LOG", $"[{timeTag}] Gemini FAIL → fallback to Groq");
             }
             catch (Exception ex)
@@ -74,15 +85,12 @@ namespace StalkerPDA.Services
                 Log.Error("PDA_LOG", $"[{timeTag}] Gemini ERROR: {ex.Message}");
             }
 
+            // 2. СПРОБА ЧЕРЕЗ GROQ (Llama 3.1)
             try
             {
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
 
-                var request = new HttpRequestMessage(
-                    HttpMethod.Post,
-                    "https://api.groq.com/openai/v1/chat/completions"
-                );
-
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.groq.com/openai/v1/chat/completions");
                 request.Headers.Add("Authorization", $"Bearer {GroqKey}");
 
                 var body = new
@@ -93,58 +101,40 @@ namespace StalkerPDA.Services
                         new { role = "system", content = systemContent },
                         new { role = "user", content = userContent }
                     },
-                    temperature = 0.7
+                    temperature = 0.5 // Також знижуємо температуру тут
                 };
 
-                request.Content = new StringContent(
-                    JsonConvert.SerializeObject(body),
-                    Encoding.UTF8,
-                    "application/json"
-                );
-
-                Log.Debug("PDA_LOG", $"[{timeTag}] Groq: Sending...");
+                request.Content = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8, "application/json");
 
                 var res = await client.SendAsync(request);
-                string resText = await res.Content.ReadAsStringAsync();
-
-                Log.Debug("PDA_LOG", $"[{timeTag}] Groq RAW: {resText}");
-                Log.Debug("PDA_LOG", $"[{timeTag}] Groq: Status {res.StatusCode}");
-
                 if (res.IsSuccessStatusCode)
                 {
+                    var resText = await res.Content.ReadAsStringAsync();
                     var j = JObject.Parse(resText);
-
-                    string result =
-                        j["choices"]?[0]?["message"]?["content"]?.ToString()
-                        ?? j["choices"]?[0]?["delta"]?["content"]?.ToString();
+                    string result = j["choices"]?[0]?["message"]?["content"]?.ToString();
 
                     if (!string.IsNullOrWhiteSpace(result))
                     {
-                        Log.Debug("PDA_LOG", $"[{timeTag}] Groq RESPONSE: {result}");
+                        Log.Debug("PDA_LOG", $"[{timeTag}] Groq OK");
                         return result.Trim();
                     }
                 }
-
-                Log.Error("PDA_LOG", $"[{timeTag}] Groq FAIL (empty or bad response)");
             }
             catch (Exception ex)
             {
                 Log.Error("PDA_LOG", $"[{timeTag}] Groq ERROR: {ex.Message}");
             }
 
+            // 3. СПРОБА ЧЕРЕЗ POLLINATIONS (Безкоштовний резерв)
             try
             {
-                Log.Debug("PDA_LOG", $"[{timeTag}] Pollinations fallback...");
-
                 using var client = new HttpClient { Timeout = TimeSpan.FromSeconds(10) };
-
                 string url = $"https://text.pollinations.ai/{Uri.EscapeDataString(combinedPrompt)}";
-
                 var result = await client.GetStringAsync(url);
 
                 if (!string.IsNullOrWhiteSpace(result))
                 {
-                    Log.Debug("PDA_LOG", $"[{timeTag}] Pollinations RESPONSE: {result}");
+                    Log.Debug("PDA_LOG", $"[{timeTag}] Pollinations OK");
                     return result.Trim();
                 }
             }
@@ -153,7 +143,6 @@ namespace StalkerPDA.Services
                 Log.Error("PDA_LOG", $"[{timeTag}] Pollinations ERROR: {ex.Message}");
             }
 
-            Log.Debug("PDA_LOG", $"[{timeTag}] OFFLINE FALLBACK");
             return offlineFallback;
         }
     }

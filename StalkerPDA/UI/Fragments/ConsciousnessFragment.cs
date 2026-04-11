@@ -39,12 +39,12 @@ namespace StalkerPDA.UI.Fragments
                 _chatInput.Text = "";
                 _btnSend.Enabled = false;
 
-                AddMessage($"[ВИ]: {text}");
+                AddMessage($"[Ви]: {text}");
 
                 try
                 {
                     string response = await _aiService.SendConsciousnessMessageAsync(text);
-                    AddMessage($"[О-СВІДОМІСТЬ]: {response}");
+                    AddMessage($"[С-СВІДОМІСТЬ]: {response}");
                 }
                 catch (Exception ex)
                 {

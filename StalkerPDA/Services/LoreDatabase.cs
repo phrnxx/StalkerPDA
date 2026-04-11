@@ -13,14 +13,40 @@ namespace StalkerPDA.Services
         {
             new Stalker("Ріхтер", "Вільні"),
             new Stalker("Скіф", "Вільні"),
-            new Stalker("Гарпія", "Корпус"),
-            new Stalker("Габела", "Корпус"),
             new Stalker("Богдан Монгол", "Вільні"),
-            new Stalker("Полин", "Іскра"),
             new Stalker("Шустрий", "Вільні"),
-            new Stalker("Льова Фан", "Залісся"),
+            new Stalker("Чижик", "Вільні"),
+
+            new Stalker("Полин", "Іскра"),
+            new Stalker("Тиха", "Іскра"),
+
             new Stalker("Полковник Коршунов", "Варта"),
             new Stalker("Капітан Зотов", "Варта"),
+            new Stalker("Рядовий Дрібний", "Варта"),
+
+            new Stalker("Майор Кривцов", "Долг"),
+            new Stalker("Сержант Бурий", "Долг"),
+
+            new Stalker("Вовк", "Воля"),
+            new Stalker("Лис", "Воля"),
+
+            new Stalker("Граф", "Свобода"),
+            new Stalker("Мурена", "Свобода"),
+
+            new Stalker("Гарпія", "Найманці"),
+            new Stalker("Байт", "Найманці"),
+            new Stalker("Клещ", "Найманці"),
+
+            new Stalker("Відморозок", "Бандити"),
+            new Stalker("Дрин", "Бандити"),
+
+            new Stalker("Доктор Ніл", "Вчені"),
+            new Stalker("Льова Фан", "Вчені"),
+
+            new Stalker("Сіренко", "Чисте Небо"),
+
+            new Stalker("Габела", "Незалежні"),
+
             new Stalker("Болотний Доктор", "Легенда")
         };
 
@@ -33,7 +59,9 @@ namespace StalkerPDA.Services
             "Ніхто не знаходив мій детектор? Загубив десь біля Аномального Гаю.",
             "Ех, зараз би гарячої тушонки та до вогнища...",
             "Хтось чув цю дивну стрілянину з боку Дикої Території?",
-            "Край, чарівний край... Знову над Териконом хмари сходяться."
+            "Край, чарівний край... Знову над Териконом хмари сходяться.",
+            "Обережно на маршруті через Корогод — там нова аномалія з'явилась.",
+            "Зона сьогодні неспокійна. Щось відчуваю в повітрі.",
         };
 
         private static readonly List<string> _techPhrases = new List<string>
@@ -41,7 +69,8 @@ namespace StalkerPDA.Services
             "Кому треба відкалібрувати детектор — тягніть на Янів. Тільки обітріть його від бруду спочатку.",
             "Куплю радіодеталі, мідний дріт та плати. Дорого.",
             "Знову принесли заклинивший 'Калаш'. Ви зброю взагалі чистите, чи тільки в багнюку кидаєте?",
-            "Є пара вільних годин, можу зробити апгрейд броні. Пишіть у приват."
+            "Є пара вільних годин, можу зробити апгрейд броні. Пишіть у приват.",
+            "Зношений ствол — це квиток в одну сторону. Обслуговуйте зброю.",
         };
 
         private static readonly List<string> _tradePhrases = new List<string>
@@ -49,7 +78,8 @@ namespace StalkerPDA.Services
             "Свіже постачання аптечок та антирадів. Ціни кусаються, але життя дорожче, бродяги.",
             "Куплю артефакт 'Світляк'. Плачу подвійну ціну, пропозиція дійсна до вечора.",
             "Кому потрібні набої 5.45? Є кілька цинків, віддам за хорошу ціну.",
-            "Бродяги, сьогодні знижка на енергетики. Залітайте."
+            "Бродяги, сьогодні знижка на енергетики. Залітайте.",
+            "Не слухайте чуток. У мене завжди є свіжа ковбаса та гарний настрій.",
         };
 
         private static readonly List<string> _vartaPhrases = new List<string>
@@ -57,23 +87,212 @@ namespace StalkerPDA.Services
             "Увага всім нелегалам. Квадрат D-4 закрито на зачистку.",
             "Нагадую: перебування в Зоні без офіційного дозволу карається згідно з протоколом.",
             "Патруль 4, доповісти обстановку. Бачу рух у вашому секторі.",
-            "Виявлено скупчення мутантів біля КПП. Цивільним особам рекомендується уникати цього маршруту."
+            "Виявлено скупчення мутантів біля КПП. Цивільним особам рекомендується уникати цього маршруту.",
+            "Зона — не місце для туристів. Хто без перепустки — гарантую неприємності.",
+        };
+
+        private static readonly List<string> _dolgPhrases = new List<string>
+        {
+            "Обов'язок перед живими — знищити мутантів. Обов'язок перед мертвими — не забути.",
+            "Зона — аномалія. Аномалія — загроза. Загроза підлягає ліквідації.",
+            "Дисципліна — єдине, що відрізняє нас від мутантів.",
+            "Свободівці знову торгують інформацією. Стежте за ними.",
+            "Хтось бачив зграю псевдособак поблизу Ростка? Необхідна зачистка.",
+        };
+
+        private static readonly List<string> _svobodaPhrases = new List<string>
+        {
+            "Зона — для всіх! Хто сказав, що вона тільки для обраних?",
+            "Інформація вільна. Артефакти — вільні. Навіщо взагалі заборони?",
+            "Бачили, як 'Обов'язок' знову перекрив прохід? Ось чому ми існуємо.",
+            "Свобода не дається — вона береться. Запам'ятайте це, бродяги.",
+        };
+
+        private static readonly List<string> _volyaPhrases = new List<string>
+        {
+            "Виживає не найсильніший. Виживає той, хто розуміє Зону.",
+            "Зброя — інструмент. Голова — головний інструмент.",
+            "Ми не воюємо з Зоною — ми живемо разом з нею.",
+            "Є базова точка в Темній долині. Прийдеш — нагодуємо.",
+        };
+
+        private static readonly List<string> _naimanciPhrases = new List<string>
+        {
+            "Контракт виконано. Клієнт задоволений. Питань не ставити.",
+            "Ми не питаємо навіщо. Ми питаємо скільки.",
+            "Є замовлення на ескорт до ЧАЕС. Оплата наперед.",
+            "Інформація — товар. Хто хоче купити — пишіть у приват.",
+        };
+
+        private static readonly List<string> _iscraPhrases = new List<string>
+        {
+            "Зона говорить з тими, хто вміє слухати. Ви вмієте?",
+            "Не всі загадки Зони пов'язані з аномаліями. Деякі — з людьми.",
+            "Іскра горить там, де темно. Ми — ця іскра.",
+            "Є дані по викиду за останні 72 години. Хто хоче — діліться координатами.",
+        };
+
+        private static readonly List<string> _bandytyPhrases = new List<string>
+        {
+            "Лопатник сам себе не набере, га?",
+            "Хто проходить мимо Складів — платить прохідне. Традиція.",
+            "Є завдання. Просте. Тихе. Добре оплачується.",
+            "Та не бійтеся ви нас! Ми нікого не чіпаємо... без причини.",
+        };
+
+        private static readonly List<string> _vcheniPhrases = new List<string>
+        {
+            "Фіксую підвищений рівень псі-випромінювання в секторі B-7.",
+            "Артефакт 'Кришталева колючка' — феноменальний зразок. Дайте дослідити!",
+            "Потрібні зразки крові снорка. Хто принесе — заплачу добре.",
+            "Теорія викидів як очищувального механізму Зони набуває підтвердження.",
+        };
+
+        private static readonly List<string> _chistoNeboPhrases = new List<string>
+        {
+            "Ми дивилися в серце Зони. Вона дивилася у відповідь.",
+            "Зоною можна керувати. Треба лише знайти правильний ключ.",
+            "Аномальна активність у центрі зростає. Обережно.",
         };
 
         private static readonly List<string> _doctorPhrases = new List<string>
         {
             "А чи знає ціну свободи той, хто ніколи не був вільним?",
             "Зона жива. Вона дихає нами...",
-            "Не шукай сенсу там, де його давно з'їла жадібність."
+            "Не шукай сенсу там, де його давно з'їла жадібність.",
+            "Все, що ти шукаєш, вже є в тобі. Зона лише показує дзеркало.",
         };
+
+        private static readonly Dictionary<string, List<string>> _replyPhrases =
+            new Dictionary<string, List<string>>
+            {
+                ["Майор Кривцов"] = new List<string> { "Свобода каже «інформація вільна». Тоді чому ховаєте зброю на складах?", "Ідеалізм — дорога в могилу. Факт." },
+                ["Капітан Зотов"] = new List<string> { "Протокол є протокол. Обговорення закрито.", "Ще раз побачу без перепустки — конфіскую спорядження." },
+                ["Рядовий Дрібний"] = new List<string> { "Пан капітан це почув? Чи мені доповісти?", "Я просто стою на посту. Не стріляйте в гінця." },
+                ["Ріхтер"] = new List<string> { "Обов'язок знову бубнить. Послухайте хоч раз тишу, вона розумніша.", "Свобода — не хаос. Свобода — це вибір." },
+                ["Вовк"] = new List<string> { "Зброя не вирішує — вирішує той, хто тримає зброю.", "Ми виживаємо не завдяки правилам, а всупереч їм." },
+                ["Скіф"] = new List<string> { "Фракції — це просто спосіб поділити хабар. Не більше.", "Я не вступаю в суперечки. Я просто йду далі." },
+                ["Шустрий"] = new List<string> { "Стоп-стоп-стоп. Хтось це перевіряв особисто? Особисто?!", "Я нікому не вірю. Це не параноя — це досвід." },
+                ["Байт"] = new List<string> { "Замовлення прийнято. Деталі — в приваті.", "Ми не обговорюємо контракти на відкритому каналі." },
+                ["Гарпія"] = new List<string> { "...", "Зрозуміло." },
+                ["Відморозок"] = new List<string> { "О, знову ці умники балакають. Може, краще справами займетесь?", "Ха! Цікава теорія. Шкода, практика інша." },
+                ["Дрин"] = new List<string> { "Ха-ха-ха! Та розслабтеся ви всі.", "А мені норм, якщо чесно." },
+                ["Габела"] = new List<string> { "Не слухай нікого. Заходь до мене, є свіжа ковбаса.", "Поки всі сваряться, я торгую. Логіка бізнесу.", "Є горілка, є їжа. Всі проблеми вирішуються за столом." },
+                ["Доктор Ніл"] = new List<string> { "З наукової точки зору — дуже цікаво! Запишу у звіт.", "А зразок залишився? Для аналізу?" },
+                ["Льова Фан"] = new List<string> { "О, це нагадує один випадок з моєї практики!", "Заходьте до лабораторії, маю щось показати." },
+                ["Граф"] = new List<string> { "Свобода думки — перший крок до свободи дії.", "Ось чому я люблю цей канал. Завжди є за що посперечатись." },
+                ["Лис"] = new List<string> { "Вовк правий. Як завжди.", "Слухайте Вовка. Він третій рік у Зоні живий — це щось значить." },
+                ["Чижик"] = new List<string> { "Та все буде добре! Завжди було, і зараз буде.", "Оптимізм — найкращий захист від радіації. Перевірено." },
+                ["Полин"] = new List<string> { "Іскра горить у темряві. Ми продовжуємо роботу.", "Дані підтверджені. Надсилаю координати на закритий канал." },
+                ["Тиха"] = new List<string> { "...", "Чула. Слідкую." },
+                ["Сіренко"] = new List<string> { "Аномальна активність зростає. Це не випадково.", "Ми вже досліджували цей квадрат. Щось там не так із простором." },
+                ["Богдан Монгол"] = new List<string> { "Слухайте, я знаю одну байку про це... часу є хвилин двадцять?", "Нагадує мені один випадок у 2019-му. Тоді ми теж думали, що все під контролем." },
+                ["Мурена"] = new List<string> { "Не довіряйте жодному відкритому каналу. Нас слухають.", "Мовчіть. Серйозно." },
+                ["Сержант Бурий"] = new List<string> { "Порядок — понад усе. Хто не розуміє — пояснимо особисто.", "Обов'язок не обговорюється." },
+                ["Клещ"] = new List<string> { "Слідкую за ситуацією. Зміни — негайно на зв'язок.", "Мені платять не за балачки." },
+                ["Полковник Коршунов"] = new List<string> { "Без коментарів.", "Виконуйте наказ." },
+            };
+
+        public static readonly Dictionary<string, List<string>> ReplyMap =
+            new Dictionary<string, List<string>>
+            {
+                ["Вільні"] = new List<string> { "Габела", "Чижик", "Богдан Монгол" },
+                ["Іскра"] = new List<string> { "Полин", "Тиха", "Доктор Ніл" },
+                ["Варта"] = new List<string> { "Рядовий Дрібний", "Капітан Зотов" },
+                ["Долг"] = new List<string> { "Ріхтер", "Вовк", "Сержант Бурий" },
+                ["Свобода"] = new List<string> { "Майор Кривцов", "Граф", "Мурена" },
+                ["Воля"] = new List<string> { "Лис", "Вовк" },
+                ["Найманці"] = new List<string> { "Байт", "Гарпія", "Клещ" },
+                ["Бандити"] = new List<string> { "Відморозок", "Дрин" },
+                ["Вчені"] = new List<string> { "Доктор Ніл", "Льова Фан", "Сіренко" },
+                ["Чисте Небо"] = new List<string> { "Сіренко", "Полин" },
+                ["Незалежні"] = new List<string> { "Габела" },
+                ["Легенда"] = new List<string>(), 
+            };
 
         public static string GetPhraseForStalker(Stalker stalker)
         {
             if (stalker.Name == "Болотний Доктор") return _doctorPhrases[_rng.Next(_doctorPhrases.Count)];
             if (stalker.Faction == "Варта") return _vartaPhrases[_rng.Next(_vartaPhrases.Count)];
+            if (stalker.Faction == "Долг") return _dolgPhrases[_rng.Next(_dolgPhrases.Count)];
+            if (stalker.Faction == "Свобода") return _svobodaPhrases[_rng.Next(_svobodaPhrases.Count)];
+            if (stalker.Faction == "Воля") return _volyaPhrases[_rng.Next(_volyaPhrases.Count)];
+            if (stalker.Faction == "Найманці") return _naimanciPhrases[_rng.Next(_naimanciPhrases.Count)];
+            if (stalker.Faction == "Іскра") return _iscraPhrases[_rng.Next(_iscraPhrases.Count)];
+            if (stalker.Faction == "Бандити") return _bandytyPhrases[_rng.Next(_bandytyPhrases.Count)];
+            if (stalker.Faction == "Вчені") return _vcheniPhrases[_rng.Next(_vcheniPhrases.Count)];
+            if (stalker.Faction == "Чисте Небо") return _chistoNeboPhrases[_rng.Next(_chistoNeboPhrases.Count)];
             if (stalker.Name == "Гарпія") return _techPhrases[_rng.Next(_techPhrases.Count)];
             if (stalker.Name == "Габела" || stalker.Name == "Льова Фан") return _tradePhrases[_rng.Next(_tradePhrases.Count)];
             return _generalPhrases[_rng.Next(_generalPhrases.Count)];
+        }
+
+        public static string GetReplyForCharacter(Stalker replier)
+        {
+            if (_replyPhrases.TryGetValue(replier.Name, out var replies))
+                return replies[_rng.Next(replies.Count)];
+            return GetPhraseForStalker(replier);
+        }
+
+  
+        public static string GetContextualReply(Stalker replier, Stalker triggerSpeaker, string triggerPhrase)
+        {
+            var factionConflicts = new Dictionary<(string, string), List<string>>
+            {
+                [("Долг", "Свобода")] = new List<string>
+                {
+                    $"{triggerSpeaker.Name}, ти серйозно? Свобода — це анархія, а не ідеологія.",
+                    $"Почув тебе, {triggerSpeaker.Name}. Записав. Для протоколу.",
+                },
+                [("Свобода", "Долг")] = new List<string>
+                {
+                    $"{triggerSpeaker.Name} знову про дисципліну. Зона не читала ваш статут.",
+                    $"Слухай, {triggerSpeaker.Name}, може вийдеш зі своїх казарм і подивишся на реальність?",
+                },
+                [("Варта", "Бандити")] = new List<string>
+                {
+                    $"Зафіксовано. {triggerSpeaker.Name}, чекай гостей.",
+                    $"Ще одне слово — і квадрат вашого табору переходить у статус «зачистка».",
+                },
+                [("Бандити", "Варта")] = new List<string>
+                {
+                    $"О, вже доповів? Молодець, {triggerSpeaker.Name}. Тепер ховайся.",
+                    $"Ха! Варта лякає. Смішно.",
+                },
+                [("Вчені", "Бандити")] = new List<string>
+                {
+                    $"Дивовижно. {triggerSpeaker.Name} вміє писати. Хтось навчив.",
+                    $"Прошу не заходити в сектор досліджень. Для вашої ж безпеки.",
+                },
+            };
+
+            var key = (replier.Faction, triggerSpeaker.Faction);
+            if (factionConflicts.TryGetValue(key, out var conflictReplies))
+                return conflictReplies[_rng.Next(conflictReplies.Count)];
+
+            if (replier.Faction == triggerSpeaker.Faction)
+            {
+                var solidarityReplies = new List<string>
+                {
+                    $"+1. {triggerSpeaker.Name} правий.",
+                    $"Підтверджую слова {triggerSpeaker.Name}. Сам бачив.",
+                    $"Слухайте {triggerSpeaker.Name}, він знає про що говорить.",
+                };
+                return solidarityReplies[_rng.Next(solidarityReplies.Count)];
+            }
+
+            return GetReplyForCharacter(replier);
+        }
+
+        public static List<Stalker> GetPossibleRepliers(string faction)
+        {
+            if (!ReplyMap.TryGetValue(faction, out var names) || names.Count == 0)
+                return new List<Stalker>();
+
+            return names
+                .Select(name => Characters.FirstOrDefault(c => c.Name == name))
+                .Where(c => c != null)
+                .ToList();
         }
 
         public static Stalker GetRandomActiveCharacter()

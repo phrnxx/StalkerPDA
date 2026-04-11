@@ -47,12 +47,16 @@ namespace StalkerPDA.Services
                     await Task.Delay(1000);
                 }
 
+               
                 if (_pendingReplies.Count == 0)
                 {
+                    await Task.Delay(TICK_RATE_MS);
                     GenerateRandomEvent();
                 }
-
-                await Task.Delay(TICK_RATE_MS);
+                else
+                {
+                    await Task.Delay(TICK_RATE_MS);
+                }
             }
         }
 
@@ -64,32 +68,54 @@ namespace StalkerPDA.Services
 
             if (_rng.Next(0, 100) < 40)
             {
-                CreateReplyChain(activeStalker);
+                CreateReplyChain(activeStalker, phrase);
             }
         }
 
-        private void CreateReplyChain(Stalker firstSpeaker)
+        private void CreateReplyChain(Stalker firstSpeaker, string triggerPhrase)
         {
-            Stalker replier;
-            string replyText = "";
+            var possibleRepliers = LoreDatabase.GetPossibleRepliers(firstSpeaker.Faction);
 
-            if (firstSpeaker.Faction == "Вільні" || firstSpeaker.Faction == "Іскра")
+            if (possibleRepliers.Count == 0) return;
+
+            int chainLength = _rng.Next(1, 4);
+            int delaySeconds = _rng.Next(5, 12);
+            Stalker previousSpeaker = firstSpeaker;
+            string previousPhrase = triggerPhrase;
+
+            for (int i = 0; i < chainLength; i++)
             {
-                replier = LoreDatabase.GetCharacterByName("Габела");
-                replyText = $"Не слухай нікого, {firstSpeaker.Name}. Заходь до мене, є свіжа ковбаса.";
-            }
-            else
-            {
-                replier = LoreDatabase.GetCharacterByName("Ріхтер");
-                replyText = "Згоден з тобою на всі сто.";
+                var candidates = possibleRepliers
+                    .Where(r => r.Name != previousSpeaker.Name)
+                    .ToList();
+                if (candidates.Count == 0) candidates = possibleRepliers;
+
+                Stalker replier = candidates[_rng.Next(candidates.Count)];
+                string replyText = LoreDatabase.GetContextualReply(replier, firstSpeaker, previousPhrase);
+
+                _pendingReplies.Add(new PendingReply
+                {
+                    ExecuteTime = DateTime.Now.AddSeconds(delaySeconds),
+                    Author = replier,
+                    Text = replyText
+                });
+
+                previousSpeaker = replier;
+                previousPhrase = replyText;
+                delaySeconds += _rng.Next(4, 10);
             }
 
-            _pendingReplies.Add(new PendingReply
+            if (_rng.Next(0, 100) < 20)
             {
-                ExecuteTime = DateTime.Now.AddSeconds(_rng.Next(5, 12)),
-                Author = replier,
-                Text = replyText
-            });
+                Stalker gabela = LoreDatabase.GetCharacterByName("Габела");
+                string closePhrase = LoreDatabase.GetContextualReply(gabela, firstSpeaker, triggerPhrase);
+                _pendingReplies.Add(new PendingReply
+                {
+                    ExecuteTime = DateTime.Now.AddSeconds(delaySeconds + 5),
+                    Author = gabela,
+                    Text = closePhrase
+                });
+            }
         }
 
         private void SendMessage(Stalker author, string text)

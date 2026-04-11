@@ -13,22 +13,26 @@ namespace StalkerPDA.UI.Fragments
         {
             var view = new LinearLayout(Activity) { Orientation = Orientation.Vertical };
             view.SetBackgroundColor(Color.Transparent);
+            view.SetPadding(16, 16, 16, 16);
 
-            var title = new TextView(Activity) { Text = "ЕНЦИКЛОПЕДІЯ ЗОНИ", TextSize = 20 };
-            title.SetTextColor(Color.ParseColor("#00BFFF"));
-            title.SetPadding(20, 20, 20, 20);
+            var title = new TextView(Activity) { Text = "АРХІВ ДАНИХ", TextSize = 20 };
+            title.SetTextColor(Color.ParseColor("#43A047"));
+            title.SetPadding(0, 10, 0, 30);
             view.AddView(title);
 
             var listView = new ListView(Activity);
             var categories = new List<string> { "Локації", "Мутанти", "Аномалії", "Артефакти", "Зброя" };
+
             var adapter = new ArrayAdapter<string>(Activity, Android.Resource.Layout.SimpleListItem1, categories);
             listView.Adapter = adapter;
 
             listView.ItemClick += (s, e) =>
             {
                 string category = categories[e.Position];
+                var nextFragment = new LoreListFragment(category);
+
                 var transaction = FragmentManager.BeginTransaction();
-                transaction.Replace(Resource.Id.fragment_container, new LoreListFragment(category));
+                transaction.Replace(Resource.Id.main_fragment_container, nextFragment);
                 transaction.AddToBackStack(null);
                 transaction.Commit();
             };

@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Android.App;
-using Android.Graphics;
 using Android.OS;
+using Android.Views; // Обов'язково для роботи зі шторкою екрана
 using Android.Widget;
 using StalkerPDA.UI.Fragments;
 using StalkerPDA.Services;
@@ -13,9 +13,7 @@ namespace StalkerPDA
     [Activity(Label = "P.D.A.", Theme = "@android:style/Theme.Black.NoTitleBar", MainLauncher = true)]
     public class MainActivity : Activity
     {
-        private Button _btnQuests, _btnNetwork, _btnNews, _btnZone, _btnConsciousness;
         private ContextAnalyzer _contextAnalyzer;
-
         public static ALifeSimulator SharedSimulator;
         public static List<string> GlobalNetworkMessages = new List<string>();
         public static event Action<string> OnNetworkMessageReceived;
@@ -23,19 +21,63 @@ namespace StalkerPDA
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
+            // Примусовий ландшафтний режим
+            RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
             SetContentView(Resource.Layout.activity_main);
 
+            InitBackgroundServices();
+
+            // Знаходимо наші нові тактичні кнопки
+            var btnQuests = FindViewById<Button>(Resource.Id.tab_quests);
+            var btnMap = FindViewById<Button>(Resource.Id.tab_map);
+            var btnNetwork = FindViewById<Button>(Resource.Id.tab_network);
+            var btnConsciousness = FindViewById<Button>(Resource.Id.tab_consciousness);
+            var btnDatabase = FindViewById<Button>(Resource.Id.tab_database);
+
+            // Підключаємо перемикання зі звуком кліку
+            btnQuests.Click += (s, e) => LoadFragmentWithSound(new QuestsFragment());
+            btnMap.Click += (s, e) => LoadFragmentWithSound(new MapFragment());
+            btnNetwork.Click += (s, e) => LoadFragmentWithSound(new ChatFragment());
+            btnConsciousness.Click += (s, e) => LoadFragmentWithSound(new ConsciousnessFragment());
+            btnDatabase.Click += (s, e) => LoadFragmentWithSound(new ZoneFragment());
+
+            // Завантажуємо першу вкладку при старті (без звуку, щоб не клацало при запуску)
+            if (savedInstanceState == null) LoadFragmentWithSound(new QuestsFragment(), playSound: false);
+        }
+
+        // ==========================================
+        // МАГІЯ ЗНИЩЕННЯ ШТОРКИ (Immersive Mode)
+        // ==========================================
+        public override void OnWindowFocusChanged(bool hasFocus)
+        {
+            base.OnWindowFocusChanged(hasFocus);
+            if (hasFocus)
+            {
+                // Вмикаємо жорсткий повноекранний режим. 
+                // Телефон тепер виглядає як суцільний пристрій без системних іконок Android.
+                Window.DecorView.SystemUiVisibility = (StatusBarVisibility)(
+                    SystemUiFlags.ImmersiveSticky |
+                    SystemUiFlags.HideNavigation |
+                    SystemUiFlags.Fullscreen |
+                    SystemUiFlags.LayoutHideNavigation |
+                    SystemUiFlags.LayoutFullscreen |
+                    SystemUiFlags.LayoutStable);
+            }
+        }
+
+        private void LoadFragmentWithSound(Fragment fragment, bool playSound = true)
+        {
+            if (playSound) SoundManager.PlayClick(this);
+            var transaction = FragmentManager.BeginTransaction();
+            transaction.Replace(Resource.Id.main_fragment_container, fragment);
+            transaction.Commit();
+        }
+
+        private void InitBackgroundServices()
+        {
             if (SharedSimulator == null)
             {
                 SharedSimulator = new ALifeSimulator();
-
-                for (int i = 0; i < 3; i++)
-                {
-                    var stalker = LoreDatabase.GetRandomActiveCharacter();
-                    var msg = new PdaMessage(stalker.Name, stalker.Faction, LoreDatabase.GetPhraseForStalker(stalker));
-                    GlobalNetworkMessages.Add(FormatPdaMessage(msg));
-                }
-
                 SharedSimulator.OnMessageGenerated += (s, msg) => {
                     var formatted = FormatPdaMessage(msg);
                     RunOnUiThread(() => {
@@ -43,66 +85,37 @@ namespace StalkerPDA
                         OnNetworkMessageReceived?.Invoke(formatted);
                     });
                 };
-
                 SharedSimulator.StartSimulation();
             }
 
-            _contextAnalyzer = new ContextAnalyzer();
-            _contextAnalyzer.OnTraderNotification += ShowIncomingMessage;
-            _contextAnalyzer.StartMonitoring();
-
-            _btnQuests = FindViewById<Button>(Resource.Id.btn_quests);
-            _btnNetwork = FindViewById<Button>(Resource.Id.btn_network);
-            _btnNews = FindViewById<Button>(Resource.Id.btn_news);
-            _btnZone = FindViewById<Button>(Resource.Id.btn_zone);
-            _btnConsciousness = FindViewById<Button>(Resource.Id.btn_consciousness);
-
-            _btnQuests.Click += (s, e) => { LoadFragment(new QuestsFragment()); UpdateTabStyles(_btnQuests); };
-            _btnNetwork.Click += (s, e) => { LoadFragment(new ChatFragment()); UpdateTabStyles(_btnNetwork); };
-            _btnNews.Click += (s, e) => { LoadFragment(new NewsFragment()); UpdateTabStyles(_btnNews); };
-            _btnZone.Click += (s, e) => { LoadFragment(new ZoneFragment()); UpdateTabStyles(_btnZone); };
-            _btnConsciousness.Click += (s, e) => { LoadFragment(new ConsciousnessFragment()); UpdateTabStyles(_btnConsciousness); };
-
-            LoadFragment(new QuestsFragment());
-            UpdateTabStyles(_btnQuests);
+            if (_contextAnalyzer == null)
+            {
+                _contextAnalyzer = new ContextAnalyzer();
+                _contextAnalyzer.OnTraderNotification += ShowIncomingMessage;
+                _contextAnalyzer.StartMonitoring();
+            }
         }
 
         public static string FormatPdaMessage(PdaMessage msg)
         {
             var pdaId = new Random(msg.Author.GetHashCode()).Next(10000, 99999);
             var time = DateTime.Now.ToString("HH:mm");
-            var date = DateTime.Now.ToString("dd.MM.yyyy");
-            return $"{msg.Author} [PDA #{pdaId}] {msg.Faction} - {time}\n{date}\n{msg.Text}";
+            return $"{msg.Author} [PDA #{pdaId}] - {time}\n{msg.Text}";
         }
 
         private void ShowIncomingMessage(PdaMessage msg)
         {
             RunOnUiThread(() =>
             {
+                // Звук нового квесту/повідомлення
+                SoundManager.PlayNotification(this);
+
                 var builder = new AlertDialog.Builder(this);
-                builder.SetTitle($"ВХІДНИЙ СИГНАЛ: {msg.Author}");
+                builder.SetTitle($"СИГНАЛ: {msg.Author}");
                 builder.SetMessage(msg.Text);
-                builder.SetPositiveButton("ПРИЙНЯТИ", (s, e) => { });
+                builder.SetPositiveButton("ПРИНЯТИ", (s, e) => { });
                 builder.Create().Show();
             });
-        }
-
-        private void LoadFragment(Fragment fragment)
-        {
-            var transaction = FragmentManager.BeginTransaction();
-            transaction.Replace(Resource.Id.fragment_container, fragment);
-            transaction.Commit();
-        }
-
-        private void UpdateTabStyles(Button activeButton)
-        {
-            var dimColor = Color.ParseColor("#1A3A5A");
-            _btnQuests.SetTextColor(dimColor);
-            _btnNetwork.SetTextColor(dimColor);
-            _btnNews.SetTextColor(dimColor);
-            _btnZone.SetTextColor(dimColor);
-            _btnConsciousness.SetTextColor(dimColor);
-            activeButton.SetTextColor(Color.ParseColor("#00BFFF"));
         }
     }
 }

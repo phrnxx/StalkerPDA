@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A0A0A"
-    android:padding="8dp">
+    android:background="@android:color/transparent"
+    android:padding="4dp">
 
 	<ListView
         android:id="@+id/consciousness_list_view"
@@ -21,28 +21,42 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="#121212"
-        android:padding="4dp">
+        android:background="#0A140A"
+        android:layout_marginTop="4dp">
+
+		<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text=">"
+            android:textColor="#39FF14"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:paddingRight="4dp"/>
 
 		<EditText
             android:id="@+id/consciousness_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="#05101E"
-            android:textColor="#00BFFF"
-            android:hint="Звернення до Ноосфери..."
-            android:textColorHint="#1A3A5A"
+            android:background="@android:color/transparent"
+            android:textColor="#39FF14"
+            android:hint="Введіть запит до Ноосфери..."
+            android:textColorHint="#1A4D1A"
             android:padding="12dp"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:maxLines="2"/>
 
 		<Button
             android:id="@+id/btn_consciousness_send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="КОНТАКТ"
-            android:backgroundTint="#1A3A5A"
-            android:textColor="#FFFFFF"
+            android:layout_height="match_parent"
+            android:text="EXECUTE"
+            android:background="@android:color/transparent"
+            android:textColor="#39FF14"
+            android:shadowColor="#39FF14"
+            android:shadowRadius="15"
             android:textStyle="bold" />
 	</LinearLayout>
 </RelativeLayout>
