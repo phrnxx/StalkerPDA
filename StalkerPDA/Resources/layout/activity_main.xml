@@ -3,75 +3,154 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="#0A0A08"
-    android:padding="4dp">
+    android:background="#0A0A08">
 
 	<LinearLayout
-        android:layout_width="180dp"
+        android:layout_width="165dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#14120E"
-        android:padding="10dp"
-        android:layout_marginRight="4dp">
+        android:background="#121210"
+        android:padding="10dp">
 
 		<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="P.D.A. OS v3.0"
-            android:textColor="#8C9485"
-            android:textSize="18sp"
+            android:text="P.D.A."
+            android:textColor="#C8A040"
+            android:textSize="16sp"
             android:textStyle="bold"
+            android:fontFamily="monospace"
             android:gravity="center"
-            android:layout_marginBottom="25dp"/>
+            android:letterSpacing="0.2"
+            android:layout_marginBottom="2dp"/>
 
-		<Button
-            android:id="@+id/tab_quests"
+		<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ЗАВДАННЯ"
-            android:textColor="#E5B15D"
-            android:background="@drawable/tactical_button"
-            android:padding="12dp"
+            android:text="OS v3.0"
+            android:textColor="#5A4820"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:gravity="center"
             android:layout_marginBottom="8dp"/>
 
-		<Button
-            android:id="@+id/tab_map"
+		<TextView
+            android:id="@+id/sidebar_clock"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="КАРТА ЗОНИ"
-            android:textColor="#E5B15D"
-            android:background="@drawable/tactical_button"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:text="00:00"
+            android:textColor="#D4C090"
+            android:textSize="18sp"
+            android:fontFamily="monospace"
+            android:gravity="center"
+            android:layout_marginBottom="12dp"/>
 
-		<Button
-            android:id="@+id/tab_network"
+		<ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="МЕРЕЖА"
-            android:textColor="#E5B15D"
-            android:background="@drawable/tactical_button"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none">
 
-		<Button
-            android:id="@+id/tab_consciousness"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="О-СВІДОМІСТЬ"
-            android:textColor="#E5B15D"
-            android:background="@drawable/tactical_button"
-            android:padding="12dp"
-            android:layout_marginBottom="8dp"/>
+			<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="4dp">
 
-		<Button
-            android:id="@+id/tab_database"
+				<Button
+                    android:id="@+id/tab_quests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ЗАВДАННЯ"
+                    android:layout_marginBottom="6dp"
+                    style="@style/Widget.Stalker.Button" />
+
+				<Button
+                    android:id="@+id/tab_map"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="КАРТА ЗОНИ"
+                    android:layout_marginBottom="6dp"
+                    style="@style/Widget.Stalker.Button" />
+
+				<Button
+                    android:id="@+id/tab_network"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="МЕРЕЖА"
+                    android:layout_marginBottom="6dp"
+                    style="@style/Widget.Stalker.Button" />
+
+				<Button
+                    android:id="@+id/tab_news"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="НОВИНИ"
+                    android:layout_marginBottom="6dp"
+                    style="@style/Widget.Stalker.Button" />
+
+				<Button
+                    android:id="@+id/tab_consciousness"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="С-СВІДОМІСТЬ"
+                    android:layout_marginBottom="6dp"
+                    style="@style/Widget.Stalker.Button" />
+
+				<Button
+                    android:id="@+id/tab_database"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="БАЗА ДАНИХ"
+                    style="@style/Widget.Stalker.Button" />
+			</LinearLayout>
+		</ScrollView>
+
+		<LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="БАЗА ДАНИХ"
-            android:textColor="#E5B15D"
-            android:background="@drawable/tactical_button"
-            android:padding="12dp"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp">
+			<TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="ЗАРЯД"
+                android:textColor="#5A4820"
+                android:textSize="9sp"
+                android:fontFamily="monospace"/>
+			<TextView
+                android:id="@+id/sidebar_battery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="--%"
+                android:textColor="#C87030"
+                android:textSize="9sp"
+                android:fontFamily="monospace"/>
+		</LinearLayout>
+
+		<LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+			<TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="РАД/ГОД"
+                android:textColor="#5A4820"
+                android:textSize="9sp"
+                android:fontFamily="monospace"/>
+			<TextView
+                android:id="@+id/sidebar_signal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="---"
+                android:textColor="#C8A040"
+                android:textSize="9sp"
+                android:fontFamily="monospace"/>
+		</LinearLayout>
 	</LinearLayout>
 
 	<FrameLayout
@@ -79,6 +158,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#14120E" />
+        android:background="#0A0A08" />
 
 </LinearLayout>

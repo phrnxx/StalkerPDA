@@ -3,23 +3,22 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="4dp">
+    android:padding="8dp"
+    android:layout_marginBottom="4dp">
+
 	<TextView
         android:id="@+id/message_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#f2e8d9"
-        android:textSize="13sp"
-        android:fontFamily="sans-serif-medium"
+        android:text="Автор [PDA #12345] - 12:34"
+        android:textColor="#D4C090" android:textSize="14sp"
         android:textStyle="bold" />
 
 	<TextView
         android:id="@+id/message_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#f2e8d9"
-        android:textSize="13sp"
-        android:fontFamily="sans-serif"
-        android:layout_marginTop="1dp" />
-
+        android:text="Я бачив аномалію біля..."
+        android:textColor="#D4C090" android:textSize="14sp"
+        android:layout_marginTop="2dp"/>
 </LinearLayout>

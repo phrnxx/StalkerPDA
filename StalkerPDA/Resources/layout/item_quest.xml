@@ -3,25 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
-    android:background="#0D0B0A">
+    android:padding="10dp"
+    android:background="#0A0A08">
+
+	<!-- Кольорова смужка пріоритету -->
+	<View
+        android:id="@+id/quest_priority_stripe"
+        android:layout_width="3dp"
+        android:layout_height="match_parent"
+        android:background="#C8A040"
+        android:layout_marginRight="10dp"/>
+
+	<LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+		<TextView
+            android:id="@+id/quest_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#D4C090"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            android:lineSpacingMultiplier="1.2"/>
+
+		<TextView
+            android:id="@+id/quest_deadline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#5A4820"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:layout_marginTop="3dp"/>
+	</LinearLayout>
 
 	<TextView
+        android:id="@+id/quest_badge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#f2e8d9"
-        android:textSize="16sp"
+        android:textSize="9sp"
         android:fontFamily="monospace"
-        android:textStyle="bold"
-        android:text="> "
-        android:layout_marginEnd="8dp" />
-
-	<TextView
-        android:id="@+id/quest_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#f2e8d9"
-        android:textSize="16sp"
-        android:fontFamily="monospace" />
+        android:letterSpacing="0.1"
+        android:padding="3dp"
+        android:layout_gravity="center_vertical"/>
 
 </LinearLayout>

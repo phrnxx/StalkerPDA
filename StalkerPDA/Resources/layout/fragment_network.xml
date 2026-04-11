@@ -1,16 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:padding="8dp">
+    android:orientation="vertical"
+    android:background="@android:color/transparent">
 
+	<!-- Заголовок -->
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#121210">
+
+		<TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="// мережа · загальний канал"
+            android:textColor="#5A4820"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.1"/>
+
+		<TextView
+            android:id="@+id/network_status_dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="● ОНЛАЙН"
+            android:textColor="#C8A040"
+            android:textSize="9sp"
+            android:fontFamily="monospace"/>
+	</LinearLayout>
+
+	<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2A2A1E"/>
+
+	<!-- Тільки feed, без input -->
 	<ListView
         android:id="@+id/network_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#1A3A5A"
+        android:divider="#1E1E14"
         android:dividerHeight="1dp"
-        android:transcriptMode="alwaysScroll" />
+        android:transcriptMode="alwaysScroll"
+        android:padding="8dp"
+        android:scrollbars="none"/>
 
-</RelativeLayout>
+</LinearLayout>

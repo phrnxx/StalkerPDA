@@ -3,44 +3,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@android:color/transparent"
-    android:padding="16dp">
+    android:background="@android:color/transparent">
 
-	<TextView
-        android:id="@+id/weather_status"
+	<!-- Заголовок -->
+	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Погода: З'єднання з Сферою..."
-        android:textColor="#00BFFF"
-        android:textSize="14sp"
-        android:layout_marginBottom="10dp" />
+        android:orientation="horizontal"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="#121210">
 
+		<TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="// завдання · google tasks"
+            android:textColor="#5A4820"
+            android:textSize="10sp"
+            android:fontFamily="monospace"
+            android:letterSpacing="0.1"/>
+
+		<TextView
+            android:id="@+id/weather_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Сфера..."
+            android:textColor="#7A6030"
+            android:textSize="9sp"
+            android:fontFamily="monospace"/>
+	</LinearLayout>
+
+	<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2A2A1E"/>
+
+	<!-- Приховане Моноліт попередження -->
 	<TextView
         android:id="@+id/monolith_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Моноліт, моноліт, повернися до покинутих дітей своїх, мені потрібно, треба згадати, моноліт, допоможи мені, не залишай мене моноліт, не залишай нас, твоїх дітей, чому ти залишив нас?"
+        android:text="Моноліт, моноліт, повернися до покинутих дітей своїх..."
         android:textColor="#FFFFFF"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:textStyle="italic"
         android:gravity="center"
-        android:layout_marginBottom="20dp"
-        android:visibility="gone" />
+        android:padding="16dp"
+        android:visibility="gone"/>
 
-	<TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="АКТИВНІ КОНТРАКТИ"
-        android:textColor="#00BFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="10dp" />
-
+	<!-- Список завдань -->
 	<ListView
         android:id="@+id/quests_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#1A3A5A"
-        android:dividerHeight="1dp" />
+        android:divider="#1E1E14"
+        android:dividerHeight="1dp"
+        android:padding="8dp"
+        android:scrollbars="none"/>
 
 </LinearLayout>
