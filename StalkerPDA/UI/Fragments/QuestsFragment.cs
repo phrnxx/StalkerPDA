@@ -5,8 +5,9 @@ using Android.App;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using Android.Graphics;
+using StalkerPDA.Models;
 using StalkerPDA.Services;
+using StalkerPDA.UI.Adapters;
 
 namespace StalkerPDA.UI.Fragments
 {
@@ -15,8 +16,10 @@ namespace StalkerPDA.UI.Fragments
         private ListView _questsListView;
         private TextView _monolithWarning;
         private TextView _weatherStatus;
+        private EditText _etNewNote;
+        private Button _btnAddNote;
         private QuestAdapter _adapter;
-        private List<string> _quests;
+        private List<PdaQuest> _quests;
         private GoogleTasksAPI _tasksApi;
         private BatteryMonitor _batteryMonitor;
         private WeatherAPI _weatherApi;
@@ -28,8 +31,10 @@ namespace StalkerPDA.UI.Fragments
             _questsListView = view.FindViewById<ListView>(Resource.Id.quests_list_view);
             _monolithWarning = view.FindViewById<TextView>(Resource.Id.monolith_warning);
             _weatherStatus = view.FindViewById<TextView>(Resource.Id.weather_status);
+            _etNewNote = view.FindViewById<EditText>(Resource.Id.et_new_note);
+            _btnAddNote = view.FindViewById<Button>(Resource.Id.btn_add_note);
 
-            _quests = new List<string>();
+            _quests = new List<PdaQuest>();
             _adapter = new QuestAdapter(Activity, _quests);
             _questsListView.Adapter = _adapter;
 
@@ -37,13 +42,52 @@ namespace StalkerPDA.UI.Fragments
             _batteryMonitor = new BatteryMonitor();
             _weatherApi = new WeatherAPI();
 
-            _adapter.Add("Отримання даних із сервера...");
+            _btnAddNote.Click += (s, e) =>
+            {
+                string text = _etNewNote.Text.Trim();
+                if (!string.IsNullOrEmpty(text))
+                {
+                    LocalNotesManager.AddNote(text);
+                    _etNewNote.Text = "";
+                    LoadQuestsAsync();
+                }
+            };
+
+            _questsListView.ItemLongClick += OnQuestLongClick;
 
             CheckBatteryLevel();
             LoadQuestsAsync();
             LoadWeatherAsync();
 
             return view;
+        }
+
+        private void OnQuestLongClick(object sender, AdapterView.ItemLongClickEventArgs e)
+        {
+            var quest = _quests[e.Position];
+
+            if (quest.Id == "error" || quest.Id == "empty") return;
+
+            var builder = new AlertDialog.Builder(Activity);
+            builder.SetTitle("БАЗА ДАНИХ");
+
+            if (quest.IsGoogleTask)
+            {
+                builder.SetMessage("Це завдання з Мережі (Google Tasks). Позначте його як виконане на своєму терміналі, щоб воно зникло з ПДА.");
+                builder.SetPositiveButton("ЗРОЗУМІЛО", (s, args) => { });
+            }
+            else
+            {
+                builder.SetMessage($"Видалити запис: '{quest.Title}'?");
+                builder.SetPositiveButton("ТАК", (s, args) =>
+                {
+                    LocalNotesManager.RemoveNote(quest.Id);
+                    LoadQuestsAsync();
+                });
+                builder.SetNegativeButton("НІ", (s, args) => { });
+            }
+
+            builder.Create().Show();
         }
 
         private void CheckBatteryLevel()
@@ -67,43 +111,59 @@ namespace StalkerPDA.UI.Fragments
         {
             Task.Run(async () =>
             {
+                var allQuests = new List<PdaQuest>();
+
+                allQuests.AddRange(LocalNotesManager.GetNotes());
+
                 try
                 {
-                    var activeQuests = await _tasksApi.GetActiveQuestsAsync();
-                    UpdateQuestsUI(activeQuests);
+                    var activeTasks = await _tasksApi.GetActiveQuestsAsync();
+                    if (activeTasks != null)
+                    {
+                        foreach (var task in activeTasks)
+                        {
+                            allQuests.Add(new PdaQuest
+                            {
+                                Id = Guid.NewGuid().ToString(),
+                                Title = task,
+                                Deadline = "МЕРЕЖА",
+                                IsGoogleTask = true
+                            });
+                        }
+                    }
                 }
                 catch (Exception ex)
                 {
-                    UpdateQuestsUI(null, $"Помилка: {ex.Message}");
-                }
-            });
-        }
-
-        private void UpdateQuestsUI(List<string> quests, string errorMessage = null)
-        {
-            if (Activity == null) return;
-
-            Activity.RunOnUiThread(() =>
-            {
-                _adapter.Clear();
-
-                if (errorMessage != null)
-                {
-                    _adapter.Add(errorMessage);
-                }
-                else if (quests != null && quests.Count > 0)
-                {
-                    foreach (var q in quests)
+                    allQuests.Add(new PdaQuest
                     {
-                        _adapter.Add(q);
-                    }
-                }
-                else
-                {
-                    _adapter.Add("Немає активних контрактів.");
+                        Id = "error",
+                        Title = $"Помилка: {ex.Message}",
+                        Deadline = "СИСТЕМА",
+                        IsGoogleTask = true
+                    });
                 }
 
-                _adapter.NotifyDataSetChanged();
+                if (Activity == null) return;
+
+                Activity.RunOnUiThread(() =>
+                {
+                    _quests.Clear();
+                    if (allQuests.Count == 0)
+                    {
+                        _quests.Add(new PdaQuest
+                        {
+                            Id = "empty",
+                            Title = "Немає активних контрактів.",
+                            Deadline = "СИСТЕМА",
+                            IsGoogleTask = false
+                        });
+                    }
+                    else
+                    {
+                        _quests.AddRange(allQuests);
+                    }
+                    _adapter.NotifyDataSetChanged();
+                });
             });
         }
 
@@ -126,24 +186,6 @@ namespace StalkerPDA.UI.Fragments
                     _weatherStatus.Text = "Погода: Немає зв'язку з Сферою";
                 });
             }
-        }
-    }
-
-    public class QuestAdapter : ArrayAdapter<string>
-    {
-        public QuestAdapter(Activity context, IList<string> objects)
-            : base(context, Android.Resource.Layout.SimpleListItem1, objects) { }
-
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            View view = base.GetView(position, convertView, parent);
-            TextView textView = view.FindViewById<TextView>(Android.Resource.Id.Text1);
-
-            textView.SetTextColor(Color.White);
-            textView.TextSize = 16f;
-            textView.SetPadding(20, 20, 20, 20);
-
-            return view;
         }
     }
 }

@@ -96,12 +96,12 @@ namespace StalkerPDA.UI.Fragments
 
             if (_items[position].StartsWith("[ВИ]"))
             {
-                textView.SetTextColor(Color.ParseColor("#f2e8d9")); 
-                textView.SetBackgroundColor(Color.ParseColor("#1A1A1A"));
+                textView.SetTextColor(Color.ParseColor("#E0F0FF"));
+                textView.SetBackgroundColor(Color.ParseColor("#111A22"));
             }
             else
             {
-                textView.SetTextColor(Color.ParseColor("#00BFFF")); 
+                textView.SetTextColor(Color.ParseColor("#A0E8FF"));
                 textView.SetBackgroundColor(Color.Transparent);
             }
 

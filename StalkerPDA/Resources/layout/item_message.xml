@@ -3,22 +3,33 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:layout_marginBottom="4dp">
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp"
+    android:background="@android:color/transparent">
 
-	<TextView
-        android:id="@+id/message_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Автор [PDA #12345] - 12:34"
-        android:textColor="#D4C090" android:textSize="14sp"
-        android:textStyle="bold" />
-
-	<TextView
-        android:id="@+id/message_body"
+	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Я бачив аномалію біля..."
-        android:textColor="#D4C090" android:textSize="14sp"
-        android:layout_marginTop="2dp"/>
+        android:orientation="vertical"
+        android:padding="10dp"
+        android:background="@drawable/bg_message">
+
+		<TextView
+            android:id="@+id/message_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4A6070"
+            android:textSize="12sp"
+            android:fontFamily="monospace"
+            android:layout_marginBottom="4dp"/>
+
+		<TextView
+            android:id="@+id/message_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#E0F0FF"
+            android:textSize="14sp"
+            android:fontFamily="monospace"/>
+
+	</LinearLayout>
 </LinearLayout>

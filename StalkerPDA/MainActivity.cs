@@ -22,6 +22,7 @@ namespace StalkerPDA
         private TextView _tvBattery;
         private TextView _tvSignal;
         private TextView _tvClock;
+        private TextView _tvAnimIndicator; // Анімований індикатор
         private Button _lastSelectedButton;
 
         public static ALifeSimulator SharedSimulator;
@@ -30,34 +31,57 @@ namespace StalkerPDA
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
-            base.OnCreate(savedInstanceState);
-            RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
-            SetContentView(Resource.Layout.activity_main);
+            try
+            {
+                base.OnCreate(savedInstanceState);
+                RequestedOrientation = Android.Content.PM.ScreenOrientation.Landscape;
 
-            InitBackgroundServices();
+                // Якщо є помилка в XML-дизайні, краш станеться саме на цьому рядку
+                SetContentView(Resource.Layout.activity_main);
 
-            _tvBattery = FindViewById<TextView>(Resource.Id.sidebar_battery);
-            _tvSignal = FindViewById<TextView>(Resource.Id.sidebar_signal);
-            _tvClock = FindViewById<TextView>(Resource.Id.sidebar_clock);
+                InitBackgroundServices();
 
-            _statusTimer = new Timer((e) => { RunOnUiThread(UpdateStatusIndicators); }, null, 0, 30000);
+                _tvBattery = FindViewById<TextView>(Resource.Id.sidebar_battery);
+                _tvSignal = FindViewById<TextView>(Resource.Id.sidebar_signal);
+                _tvClock = FindViewById<TextView>(Resource.Id.sidebar_clock);
 
-            var btnQuests = FindViewById<Button>(Resource.Id.tab_quests);
-            var btnMap = FindViewById<Button>(Resource.Id.tab_map);
-            var btnNetwork = FindViewById<Button>(Resource.Id.tab_network);
-            var btnNews = FindViewById<Button>(Resource.Id.tab_news);
-            var btnConsciousness = FindViewById<Button>(Resource.Id.tab_consciousness);
-            var btnDatabase = FindViewById<Button>(Resource.Id.tab_database);
+                // Запуск анімації пульсації для індикатора
+                if (_tvAnimIndicator != null)
+                {
+                    var blinkAnim = new Android.Views.Animations.AlphaAnimation(0.1f, 1.0f);
+                    blinkAnim.Duration = 800;
+                    blinkAnim.RepeatMode = Android.Views.Animations.RepeatMode.Reverse;
+                    blinkAnim.RepeatCount = Android.Views.Animations.Animation.Infinite;
+                    _tvAnimIndicator.StartAnimation(blinkAnim);
+                }
 
-            btnQuests.Click += (s, e) => { LoadFragmentWithSound(new QuestsFragment()); HighlightTab(btnQuests); };
-            btnMap.Click += (s, e) => { LoadFragmentWithSound(new MapFragment()); HighlightTab(btnMap); };
-            btnNetwork.Click += (s, e) => { LoadFragmentWithSound(new ChatFragment()); HighlightTab(btnNetwork); };
-            btnNews.Click += (s, e) => { LoadFragmentWithSound(new NewsFragment()); HighlightTab(btnNews); };
-            btnConsciousness.Click += (s, e) => { LoadFragmentWithSound(new ConsciousnessFragment()); HighlightTab(btnConsciousness); };
-            btnDatabase.Click += (s, e) => { LoadFragmentWithSound(new ZoneFragment()); HighlightTab(btnDatabase); };
+                _statusTimer = new Timer((e) => { RunOnUiThread(UpdateStatusIndicators); }, null, 0, 30000);
 
-            LoadFragmentWithSound(new QuestsFragment());
-            HighlightTab(btnQuests);
+                var btnQuests = FindViewById<Button>(Resource.Id.tab_quests);
+                var btnMap = FindViewById<Button>(Resource.Id.tab_map);
+                var btnNetwork = FindViewById<Button>(Resource.Id.tab_network);
+                var btnNews = FindViewById<Button>(Resource.Id.tab_news);
+                var btnConsciousness = FindViewById<Button>(Resource.Id.tab_consciousness);
+                var btnDatabase = FindViewById<Button>(Resource.Id.tab_database);
+
+                btnQuests.Click += (s, e) => { LoadFragmentWithSound(new QuestsFragment()); HighlightTab(btnQuests); };
+                btnMap.Click += (s, e) => { LoadFragmentWithSound(new MapFragment()); HighlightTab(btnMap); };
+                btnNetwork.Click += (s, e) => { LoadFragmentWithSound(new ChatFragment()); HighlightTab(btnNetwork); };
+                btnNews.Click += (s, e) => { LoadFragmentWithSound(new NewsFragment()); HighlightTab(btnNews); };
+                btnConsciousness.Click += (s, e) => { LoadFragmentWithSound(new ConsciousnessFragment()); HighlightTab(btnConsciousness); };
+                btnDatabase.Click += (s, e) => { LoadFragmentWithSound(new ZoneFragment()); HighlightTab(btnDatabase); };
+
+                LoadFragmentWithSound(new QuestsFragment());
+                HighlightTab(btnQuests);
+            }
+            catch (Exception ex)
+            {
+                // ПЕРЕХОПЛЕННЯ ПОМИЛКИ ТА ВИВІД НА ЕКРАН
+                string errorMsg = ex.InnerException != null ? ex.InnerException.Message : ex.Message;
+                Toast.MakeText(this, "ПОМИЛКА ЗОНИ: " + errorMsg, ToastLength.Long).Show();
+                System.Diagnostics.Debug.WriteLine($"КРИТИЧНА ПОМИЛКА: {errorMsg}");
+                throw;
+            }
         }
 
         private void UpdateStatusIndicators()
@@ -104,10 +128,10 @@ namespace StalkerPDA
             if (_lastSelectedButton != null)
             {
                 _lastSelectedButton.Selected = false;
-                _lastSelectedButton.SetTextColor(Color.ParseColor("#D4C090"));
+                _lastSelectedButton.SetTextColor(Color.ParseColor("#E0F0FF")); 
             }
             clickedButton.Selected = true;
-            clickedButton.SetTextColor(Color.ParseColor("#C8A040"));
+            clickedButton.SetTextColor(Color.ParseColor("#A0E8FF")); 
             _lastSelectedButton = clickedButton;
         }
 

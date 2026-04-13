@@ -42,13 +42,13 @@ namespace StalkerPDA.UI.Adapters
 
             if (newsItem.IsEmergency)
             {
-                titleTextView.SetTextColor(Color.ParseColor("#8B0000"));
-                descTextView.SetTextColor(Color.ParseColor("#8B0000"));
+                titleTextView.SetTextColor(Color.ParseColor("#A0E8FF"));
+                descTextView.SetTextColor(Color.ParseColor("#A0E8FF"));
             }
             else
             {
-                titleTextView.SetTextColor(Color.ParseColor("#f2e8d9"));
-                descTextView.SetTextColor(Color.ParseColor("#f2e8d9"));
+                titleTextView.SetTextColor(Color.ParseColor("#E0F0FF"));
+                descTextView.SetTextColor(Color.ParseColor("#E0F0FF"));
             }
 
             view.Click -= OnItemClick;

@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<style name="Theme.StalkerPDA" parent="@android:style/Theme.Black.NoTitleBar">
-
-		<item name="android:windowBackground">#0A0A08</item>
-		<item name="android:textColor">#D4C090</item>
-		<item name="android:colorAccent">#C8A040</item>
+		<item name="android:windowBackground">#05080A</item>
+		<item name="android:textColor">#E0F0FF</item>
+		<item name="android:colorAccent">#A0E8FF</item>
 		<item name="android:buttonStyle">@style/Widget.Stalker.Button</item>
 	</style>
 
 	<style name="Widget.Stalker.Button" parent="android:Widget.Button">
-		<item name="android:textColor">#D4C090</item>
+		<item name="android:textColor">#E0F0FF</item>
 		<item name="android:background">@drawable/tactical_button</item>
-		<item name="android:textSize">16sp</item>
+		<item name="android:textSize">14sp</item>
 		<item name="android:padding">10dp</item>
+		<item name="android:fontFamily">monospace</item>
 	</style>
 </resources>

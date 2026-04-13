@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@android:color/transparent">
 
-	<!-- Заголовок -->
 	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,13 +13,13 @@
         android:paddingRight="12dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="#121210">
+        android:background="#0B1216">
 
 		<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="// новини · вхідні сигнали"
-            android:textColor="#5A4820"
+            android:textColor="#4A6070"
             android:textSize="10sp"
             android:fontFamily="monospace"
             android:letterSpacing="0.1"/>
@@ -29,13 +28,13 @@
 	<View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#2A2A1E"/>
+        android:background="#1A2A3A"/>
 
 	<ListView
         android:id="@+id/news_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:divider="#1E1E14"
+        android:divider="#0B1216"
         android:dividerHeight="1dp"
         android:padding="8dp"
         android:scrollbars="none"/>

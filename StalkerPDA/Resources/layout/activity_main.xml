@@ -3,20 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:background="#0A0A08">
+    android:background="#05080A">
 
 	<LinearLayout
         android:layout_width="165dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#121210"
+        android:background="#0B1216"
         android:padding="10dp">
 
 		<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="P.D.A."
-            android:textColor="#C8A040"
+            android:textColor="#A0E8FF"
             android:textSize="16sp"
             android:textStyle="bold"
             android:fontFamily="monospace"
@@ -27,8 +27,8 @@
 		<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="OS v3.0"
-            android:textColor="#5A4820"
+            android:text="OS v3.0 // MONOLITH"
+            android:textColor="#4A6070"
             android:textSize="10sp"
             android:fontFamily="monospace"
             android:gravity="center"
@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="00:00"
-            android:textColor="#D4C090"
+            android:textColor="#E0F0FF"
             android:textSize="18sp"
             android:fontFamily="monospace"
             android:gravity="center"
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="ЗАРЯД"
-                android:textColor="#5A4820"
+                android:textColor="#4A6070"
                 android:textSize="9sp"
                 android:fontFamily="monospace"/>
 			<TextView
@@ -125,7 +125,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="--%"
-                android:textColor="#C87030"
+                android:textColor="#40C8C8"
                 android:textSize="9sp"
                 android:fontFamily="monospace"/>
 		</LinearLayout>
@@ -139,7 +139,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="РАД/ГОД"
-                android:textColor="#5A4820"
+                android:textColor="#4A6070"
                 android:textSize="9sp"
                 android:fontFamily="monospace"/>
 			<TextView
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="---"
-                android:textColor="#C8A040"
+                android:textColor="#A0E8FF"
                 android:textSize="9sp"
                 android:fontFamily="monospace"/>
 		</LinearLayout>
@@ -158,6 +158,6 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#0A0A08" />
+        android:background="#05080A" />
 
 </LinearLayout>

@@ -5,7 +5,6 @@
     android:orientation="vertical"
     android:background="@android:color/transparent">
 
-	<!-- Заголовок -->
 	<LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,14 +13,14 @@
         android:paddingRight="12dp"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:background="#121210">
+        android:background="#0B1216">
 
 		<TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="// завдання · google tasks"
-            android:textColor="#5A4820"
+            android:text="// завдання · мережа"
+            android:textColor="#4A6070"
             android:textSize="10sp"
             android:fontFamily="monospace"
             android:letterSpacing="0.1"/>
@@ -31,7 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Сфера..."
-            android:textColor="#7A6030"
+            android:textColor="#40C8C8"
             android:textSize="9sp"
             android:fontFamily="monospace"/>
 	</LinearLayout>
@@ -39,29 +38,70 @@
 	<View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#2A2A1E"/>
+        android:background="#1A2A3A"/>
 
-	<!-- Приховане Моноліт попередження -->
 	<TextView
         android:id="@+id/monolith_warning"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Моноліт, моноліт, повернися до покинутих дітей своїх..."
-        android:textColor="#FFFFFF"
+        android:textColor="#A0E8FF"
         android:textSize="14sp"
         android:textStyle="italic"
         android:gravity="center"
         android:padding="16dp"
         android:visibility="gone"/>
 
-	<!-- Список завдань -->
 	<ListView
         android:id="@+id/quests_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="#1E1E14"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#0B1216"
         android:dividerHeight="1dp"
-        android:padding="8dp"
-        android:scrollbars="none"/>
+        android:padding="8dp"/>
 
+	<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#0B1216"
+        android:padding="8dp">
+
+		<TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=">"
+            android:textColor="#4A6070"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:fontFamily="monospace"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical"/>
+
+		<EditText
+            android:id="@+id/et_new_note"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:textColor="#E0F0FF"
+            android:hint="Створити запис..."
+            android:textColorHint="#1A2A3A"
+            android:textSize="13sp"
+            android:fontFamily="monospace"
+            android:maxLines="1"
+            android:inputType="text"/>
+
+		<Button
+            android:id="@+id/btn_add_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ЗАПИСАТИ"
+            android:background="@android:color/transparent"
+            android:textColor="#A0E8FF"
+            android:textStyle="bold"
+            android:textSize="11sp"
+            android:fontFamily="monospace"/>
+	</LinearLayout>
 </LinearLayout>

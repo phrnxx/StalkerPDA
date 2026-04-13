@@ -19,7 +19,7 @@ namespace StalkerPDA.Services
         private bool _isRunning = false;
         private Random _rng = new Random();
         private List<PendingReply> _pendingReplies = new List<PendingReply>();
-        private const int TICK_RATE_MS = 5000;
+        private const int TICK_RATE_MS = 6000;
 
         public void StartSimulation()
         {
@@ -44,29 +44,27 @@ namespace StalkerPDA.Services
                 {
                     SendMessage(reply.Author, reply.Text);
                     _pendingReplies.Remove(reply);
-                    await Task.Delay(1000);
+                    await Task.Delay(1500);
                 }
 
-               
-                if (_pendingReplies.Count == 0)
+                if (_pendingReplies.Count == 0 && _rng.Next(0, 100) < 60)
                 {
-                    await Task.Delay(TICK_RATE_MS);
                     GenerateRandomEvent();
                 }
-                else
-                {
-                    await Task.Delay(TICK_RATE_MS);
-                }
+
+                await Task.Delay(TICK_RATE_MS);
             }
         }
 
         private void GenerateRandomEvent()
         {
             Stalker activeStalker = LoreDatabase.GetRandomActiveCharacter();
-            string phrase = LoreDatabase.GetPhraseForStalker(activeStalker);
+
+            string phrase = LoreDatabase.GenerateDynamicEvent(activeStalker);
+
             SendMessage(activeStalker, phrase);
 
-            if (_rng.Next(0, 100) < 40)
+            if (_rng.Next(0, 100) < 70)
             {
                 CreateReplyChain(activeStalker, phrase);
             }
@@ -74,16 +72,17 @@ namespace StalkerPDA.Services
 
         private void CreateReplyChain(Stalker firstSpeaker, string triggerPhrase)
         {
-            var possibleRepliers = LoreDatabase.GetPossibleRepliers(firstSpeaker.Faction);
+            int replyCount = _rng.Next(1, 5);
+            int delaySeconds = _rng.Next(3, 8);
 
-            if (possibleRepliers.Count == 0) return;
+            List<Stalker> possibleRepliers = LoreDatabase.Characters
+                .Where(c => c.Name != firstSpeaker.Name && c.Name != "Габела")
+                .ToList();
 
-            int chainLength = _rng.Next(1, 4);
-            int delaySeconds = _rng.Next(5, 12);
             Stalker previousSpeaker = firstSpeaker;
             string previousPhrase = triggerPhrase;
 
-            for (int i = 0; i < chainLength; i++)
+            for (int i = 0; i < replyCount; i++)
             {
                 var candidates = possibleRepliers
                     .Where(r => r.Name != previousSpeaker.Name)
@@ -102,16 +101,16 @@ namespace StalkerPDA.Services
 
                 previousSpeaker = replier;
                 previousPhrase = replyText;
-                delaySeconds += _rng.Next(4, 10);
+                delaySeconds += _rng.Next(4, 12);
             }
 
-            if (_rng.Next(0, 100) < 20)
+            if (_rng.Next(0, 100) < 15)
             {
                 Stalker gabela = LoreDatabase.GetCharacterByName("Габела");
                 string closePhrase = LoreDatabase.GetContextualReply(gabela, firstSpeaker, triggerPhrase);
                 _pendingReplies.Add(new PendingReply
                 {
-                    ExecuteTime = DateTime.Now.AddSeconds(delaySeconds + 5),
+                    ExecuteTime = DateTime.Now.AddSeconds(delaySeconds + 3),
                     Author = gabela,
                     Text = closePhrase
                 });
