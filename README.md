@@ -8,6 +8,20 @@ StalkerPDA — це інтелектуальна мобільна система
 Архітектура системи
 Проєкт реалізовано за модульним принципом, що забезпечує чіткий розподіл обов'язків між збором даних, логікою аналізу та рівнем представлення.
 
+## Інтерфейс системи (Stalker PDA)
+
+| Квести та Завдання | Карта Зони |
+| :---: | :---: |
+| <img src="screenshots/01_screen_quests.jpg" width="250"/> | <img src="screenshots/02_screen_map.jpg" width="250"/> |
+
+| Мережа (A-Life) | Новини |
+| :---: | :---: |
+| <img src="screenshots/03_screen_network_alife.jpg" width="250"/> | <img src="screenshots/04_screen_news.jpg" width="250"/> |
+
+| О-Свідомість (LLM) | База Даних (Лор) |
+| :---: | :---: |
+| <img src="screenshots/05_screen_consciousness.jpg" width="250"/> | <img src="screenshots/06_screen_database.jpg" width="250"/> |
+
 Ієрархія файлів та модулів проєкту
 
 StalkerPDA/
