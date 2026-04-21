@@ -82,6 +82,23 @@ StalkerPDA/
 
 └── Resources/                  // Ресурси Android (Layouts, Drawables)
 
+
+Архітектура системи (System Architecture)
+
+Проєкт побудовано на базі гібридної відмовостійкої архітектури з використанням патернів Observer та локального кешування.
+
+### 1. Каскадний Fallback-механізм (Triple Fallback)
+Система гарантує 100% доступність LLM завдяки автоматичному перемиканню між провайдерами (Gemini 2.0 Flash → Groq / Llama 3.1 → Pollinations AI) у разі помилки `429 Rate Limit` або таймаутів.
+![Fallback Diagram](docs/diagram_1.png)
+
+### 2. Офлайн-режим (Graceful Degradation)
+При повній втраті з'єднання з мережею, Context Analyzer автоматично перемикається на локальну `LoreDatabase`, забезпечуючи базовий функціонал (виживання) без крашів додатка.
+![Offline Mode](docs/diagram_2.png)
+
+### 3. Структура БД (Lore Database ERD)
+Локальне сховище семантичних тегів та лору Зони, побудоване на SQLite.
+![Database Schema](docs/diagram_3.png)
+
 Ключові функціональні блоки
 1. Система моніторингу контексту
 Включає в себе групу сервісів (GoogleTasksAPI, BatteryMonitor, WeatherAPI), що забезпечують безперервний потік даних про плани користувача, стан його пристрою та умови навколишнього середовища.
