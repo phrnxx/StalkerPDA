@@ -93,5 +93,4 @@ LLM: Gemini 2.0 Flash, Llama-3.1-8b-instant.
 Відкрийте у Visual Studio 2022.
 
 Налаштуйте ключі API в константах GeminiService.cs.
-
 Виконайте збірку (Rebuild) для завантаження NuGet-пакетів.
