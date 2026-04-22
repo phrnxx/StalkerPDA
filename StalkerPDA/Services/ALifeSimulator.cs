@@ -16,6 +16,9 @@ namespace StalkerPDA.Services
     public class ALifeSimulator
     {
         public event EventHandler<PdaMessage> OnMessageGenerated;
+
+        public double CurrentRadiationLevel { get; set; } = 0.12;
+
         private bool _isRunning = false;
         private Random _rng = new Random();
         private List<PendingReply> _pendingReplies = new List<PendingReply>();
@@ -59,8 +62,24 @@ namespace StalkerPDA.Services
         private void GenerateRandomEvent()
         {
             Stalker activeStalker = LoreDatabase.GetRandomActiveCharacter();
+            string phrase = "";
 
-            string phrase = LoreDatabase.GenerateDynamicEvent(activeStalker);
+            int currentHour = DateTime.Now.Hour;
+            int eventRoll = _rng.Next(0, 100);
+
+            if (CurrentRadiationLevel >= 0.50 && eventRoll < 30)
+            {
+                phrase = GetRadiationEventPhrase();
+            }
+            else if (eventRoll >= 30 && eventRoll < 60)
+            {
+                phrase = GetTimeOfDayPhrase(currentHour);
+            }
+            else
+            {
+                ProceduralALife generator = new ProceduralALife();
+                phrase = generator.GenerateMessage();
+            }
 
             SendMessage(activeStalker, phrase);
 
@@ -68,6 +87,57 @@ namespace StalkerPDA.Services
             {
                 CreateReplyChain(activeStalker, phrase);
             }
+        }
+
+        private string GetTimeOfDayPhrase(int hour)
+        {
+            if (hour >= 22 || hour <= 4)
+            {
+                string[] nightMessages = {
+                    "Ніч темна... ПНБ барахлить, видимість нуль. Сидіть біля вогнищ.",
+                    "Чули виття з боку Темної Долини? Краще туди до ранку не сунутися.",
+                    "Увага всім: вночі активність кровососів зросла. Будьте обережні на відкритих місцях."
+                };
+                return nightMessages[_rng.Next(nightMessages.Length)];
+            }
+            else if (hour >= 5 && hour <= 10)
+            {
+                string[] morningMessages = {
+                    "Ранок, сталкери. Туман розсіюється, вдалого полювання за артефактами.",
+                    "Хто йде на Кордон? Шукаю напарника на ранкову ходку.",
+                    "Тільки-но сонце встало, а військові вже патруль вислали. Пильнуйте."
+                };
+                return morningMessages[_rng.Next(morningMessages.Length)];
+            }
+            else if (hour >= 18 && hour <= 21)
+            {
+                string[] eveningMessages = {
+                    "Сонце сідає. Час повертатися на базу і рахувати хабар.",
+                    "Хто буде на '100 Рентген' ввечері? Я пригощаю, знайшов цілу 'Сніжинку'!",
+                    "Тіні довшають, аномалії гірше видно. Згортаємо активність."
+                };
+                return eveningMessages[_rng.Next(eveningMessages.Length)];
+            }
+            else
+            {
+                string[] dayMessages = {
+                    "Спека сьогодні... Аномалії ледь видно через марево.",
+                    "Патруль біля мосту, будьте обережні при переході.",
+                    "Знайшов 'Медузу', міняю на патрони 5.45. Чекаю на Смітнику."
+                };
+                return dayMessages[_rng.Next(dayMessages.Length)];
+            }
+        }
+
+        private string GetRadiationEventPhrase()
+        {
+            string[] radMessages = {
+                $"Дозиметр тріщить як скажений. Фон піднявся до {CurrentRadiationLevel} мР/год! Одягайте респіратори.",
+                "Знову радіоактивна хмара з боку Смітника йде. Шукайте укриття, брати.",
+                "Радіаційний фон скаче... Або артефакт потужний поруч, або зараз щось буде.",
+                "Антиради закінчуються, а фон все росте. Хто має зайві 'шприци'?"
+            };
+            return radMessages[_rng.Next(radMessages.Length)];
         }
 
         private void CreateReplyChain(Stalker firstSpeaker, string triggerPhrase)
