@@ -85,19 +85,3 @@ StalkerPDA/
 
 Відмовостійкий каскад LLM: Забезпечує стабільність роботи за умов обмежень API через три рівні доступу (Primary, Secondary, Tertiary).
 
-Технологічний стек
-Платформа: .NET 10.0 (Android)
-
-Мова: C# 13
-
-API: Google Tasks API (OAuth 2.0), OpenWeather API.
-
-LLM: Gemini 2.0 Flash, Llama-3.1-8b-instant.
-
-Встановлення та налаштування
-Клонуйте проєкт: git clone https://github.com/phrnxx/StalkerPDA.git
-
-Відкрийте у Visual Studio 2022.
-
-Налаштуйте ключі API в константах GeminiService.cs.
-Виконайте збірку (Rebuild) для завантаження NuGet-пакетів.
