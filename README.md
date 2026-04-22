@@ -41,34 +41,41 @@
 
 ```text
 StalkerPDA/
-├── MainActivity.cs             // Головний контролер програми
+├── MainActivity.cs             // Головний контролер програми та точка входу
 ├── Models/                     // Рівень даних (Data Layer)
 │   ├── LoreItem.cs             // Об’єкт статичного семантичного контексту
 │   ├── NewsItem.cs             // Модель зовнішнього інформаційного потоку
 │   ├── PdaMessage.cs           // Уніфікована модель повідомлення системи
-│   └── Stalker.cs              // Профіль суб’єкта аналізу (користувача)
+│   ├── PdaQuest.cs             // Модель завдання (квесту) користувача
+│   └── Stalker.cs              // Профіль NPC для алгоритму симуляції A-Life
 ├── Services/                   // Рівень логіки та моніторингу (Logic Layer)
-│   ├── ContextAnalyzer.cs      // Ядро аналізу контексту та прийняття рішень
-│   ├── GeminiService.cs        // Каскадний шлюз LLM (Triple Fallback)
-│   ├── GoogleTasksAPI.cs       // Моніторинг програмного контексту (завдання)
+│   ├── ALifeSimulator.cs       // Ядро управління фоновими подіями симуляції
 │   ├── BatteryMonitor.cs       // Моніторинг апаратного стану пристрою
-│   ├── WeatherAPI.cs           // Моніторинг зовнішнього середовища (погода)
+│   ├── ContextAnalyzer.cs      // Асинхронний фоновий цикл агрегації контексту (Background Loop)
+│   ├── GeminiService.cs        // Каскадний шлюз взаємодії з LLM (Triple Fallback)
+│   ├── GoogleTasksAPI.cs       // Інтеграція з екосистемою завдань (програмний контекст)
+│   ├── HardwareController.cs   // Керування тактильним зворотним зв'язком
+│   ├── LocalNotesManager.cs    // Модуль локального збереження нотаток користувача
+│   ├── LoreDatabase.cs         // In-memory сховище семантичного ядра (замість SQLite)
 │   ├── NewsScraper.cs          // Модуль агрегації зовнішніх подій
-│   ├── ALifeSimulator.cs       // Генератор динамічних подій (A-Life)
-│   ├── LoreDatabase.cs         // Локальне сховище семантичного ядра
-│   └── HardwareController.cs   // Керування тактильним зворотним зв'язком
+│   ├── ProceduralALife.cs      // Модуль процедурної генерації повідомлень (без використання LLM)
+│   ├── SoundManager.cs         // Модуль обробки звукового імерсивного супроводу
+│   └── WeatherAPI.cs           // Моніторинг зовнішнього середовища (погода)
 ├── UI/                         // Рівень представлення (Presentation Layer)
-│   ├── Fragments/              // Модульні компоненти інтерфейсу
-│   │   ├── ConsciousnessFragment.cs // Термінал прямої взаємодії з LLM
-│   │   ├── QuestsFragment.cs        // Панель візуалізації активного контексту
-│   │   ├── ChatFragment.cs          // Модуль мережевої активності
-│   │   ├── NewsFragment.cs          // Стрічка динамічного контенту
-│   │   └── LoreListFragment.cs      // Навігація по базі знань
-│   └── Adapters/               // Трансформатори даних для UI
-│       ├── ChatAdapter.cs
-│       ├── NewsAdapter.cs
-│       └── QuestAdapter.cs
-└── Resources/                  // Ресурси Android (Layouts, Drawables)
+│   ├── Adapters/               // Трансформатори даних для UI
+│   │   ├── ChatAdapter.cs      // Адаптер відображення повідомлень мережі
+│   │   ├── NewsAdapter.cs      // Адаптер стрічки новин
+│   │   └── QuestAdapter.cs     // Адаптер списку завдань
+│   └── Fragments/              // Модульні компоненти інтерфейсу
+│       ├── ChatFragment.cs          // Модуль мережевої активності («Загальний канал»)
+│       ├── ConsciousnessFragment.cs // Термінал прямої взаємодії з LLM («С-Свідомість»)
+│       ├── LoreDetailFragment.cs    // Компонент відображення деталей об'єкта лору
+│       ├── LoreListFragment.cs      // Навігація по базі знань
+│       ├── MapFragment.cs           // Модуль візуалізації глобальної мапи
+│       ├── NewsFragment.cs          // Стрічка динамічного контенту
+│       ├── QuestsFragment.cs        // Панель візуалізації активного контексту
+│       └── ZoneFragment.cs          // Візуалізація стану середовища («Датчики»)
+└── Resources/                  // Ресурси Android (Layouts, Drawables, Sounds)
 
 ```
 Ключові функціональні блоки
